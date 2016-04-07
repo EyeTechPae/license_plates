@@ -10,65 +10,67 @@ except:
 
 cap = cv2.VideoCapture('entrada2.avi')
 mask = cv2.imread('mask.png')
-mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
-mask = np.double(mask)/255;
+mask = np.double(cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)) / 255
+
+# frame skipping
+skip = 3
+frame_count = 0
+times = 0
+
+plates = []
+width, height = 0, 0
+
+h_x, h_y, h_w, h_h = 0, 0, 0, 0
 
 while True:
-    #image = cv2.imread(path)
+    # read and crop image
     _, image = cap.read()
-    
-    #image = cv2.resize(image, (640, 480))
-    x, y = 300, 100
-    image = image[y:y+480, x:x+640]
 
-    persp = cv2.getRotationMatrix2D((640/2, 480/2), -15, 1)
-    image = cv2.warpAffine(image, persp, (640, 480))
+    frame_count += 1
+    if frame_count < skip:
+        continue
+    frame_count = 0
 
-    imagecp = image.copy()
+    image = image[100:580, 300:940]
 
+    # mask image
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray = np.double(gray)
     gray = cv2.multiply(gray, mask);
     gray = np.uint8(gray)
-    #gray[foreg == 0] = 0
 
+    # get a list of potential license plates
     segments = localize.get_plate_regions(gray)
-    plates = []
-    width, height = 0, 0
-    chars = []
-    for i, (x, y, w, h) in enumerate(segments):
-        plate = gray[y:y+h, x:x+w]
-        digs = localize.get_char_regions(plate)
-        cv2.putText(image, 'Hello World!', (x, y-8), cv2.FONT_HERSHEY_DUPLEX, 0.35,  (255,255,0))
-        for x1, y1, w1, h1 in digs:
-            chars.append(image[y+y1:y+y1+h1, x+x1:x+x1+w1])
 
-        plate = image[y:y+h, x:x+w]
-        plates.append(plate)
-        width += plate.shape[1]
-        height = max(height, plate.shape[0])
+    if len(segments) == 1:
+        times += 1
+    else:
+        times = 0
 
-    comp = np.zeros((height*2+16, width+8*(len(plates)+1), 3), dtype='uint8')
-    off_x = 8
-    for plate in plates:
-        #plate = cv2.Canny(plate, 100, 120)
-        comp[8:8+plate.shape[0], off_x:off_x+plate.shape[1]] = plate
-        off_x += plate.shape[1]+8
-   
-    '''
-    off_x = 8
-    for char in chars:
-        comp[height+8:8+height+char.shape[0], off_x:off_x+char.shape[1]] = char
-        off_x += char.shape[1] 
-    '''
+    if times == 8:
+        x, y, w, h = segments[0]
 
-    composite = np.zeros((480+comp.shape[0], max(640, comp.shape[1]), 3), dtype='uint8')
-    composite[0:480, 0:640] = imagecp
-    composite[480:480+comp.shape[0], 0:comp.shape[1]] = comp
+        if abs(x-h_x) > 32 or abs(y-h_y) > 32 or abs(w-h_w) > 32 or abs(h-h_h) > 32:
+            h_x, x_y, h_w, h_h = x, y, w, h
 
-    cv2.imshow('plates', composite)
+            plates.append(image[y:y+h, x:x+w])
+            cv2.imwrite("plate{}.jpg".format(len(plates)), image[y:y+h, x:x+w])
+            #localize.get_plate_regions(gray, debug=image)
+            width = max(width, w)
+            height += h
 
-    if cv2.waitKey(10) & 255 == ord('q'):
+    if len(plates) > 0:
+        licens = np.zeros((height, width, 3), dtype="uint8")
+        acum = 0
+        for im in plates:
+            shape = im.shape
+            licens[acum:acum+shape[0], 0:shape[1]] = im
+            acum += shape[0]
+        cv2.imshow("licenses", licens)
+
+    # output image
+    cv2.imshow("output", image)
+    if cv2.waitKey(10 * skip) & 255 == ord('q'):
         break
 
 cv2.destroyAllWindows()

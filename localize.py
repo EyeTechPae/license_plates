@@ -5,7 +5,7 @@ import numpy as np
 _density_kernel = np.ones((3, 45), dtype='float64')
 
 def get_char_regions (image):
-    '''Look for regions that resemble license plate chracters'''
+    """Look for regions that resemble license plate chracters"""
     
     ker = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3)) 
     image = cv2.GaussianBlur(image, (3, 3), 3)
@@ -69,7 +69,7 @@ def get_plate_regions (image, debug=None):
     return plates 
 
 def get_plate_regions_pre (image):
-    '''Compute a list of potential license plates'''
+    """Compute a list of potential license plates"""
 
     # top hat
     #image = cv2.GaussianBlur(image, (5, 5), 4)
@@ -114,7 +114,7 @@ def get_plate_regions_pre (image):
             e = 8 
             potentials.append((max(x-e, 0), max(y-e, 0), min(w+e*2, 640), min(h+e*2, 480))) 
 
-    #cv2.imshow("step", sobel)
+    #cv2.imshow("step", sobel_x)
     #cv2.waitKey(0)
     
     return potentials
