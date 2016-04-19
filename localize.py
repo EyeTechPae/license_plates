@@ -114,7 +114,7 @@ def get_plate_regions_pre (image):
             e = 8 
             potentials.append((max(x-e, 0), max(y-e, 0), min(w+e*2, 640), min(h+e*2, 480))) 
 
-    #cv2.imshow("step", sobel_x)
+    #cv2.imshow("step", sobel_add)
     #cv2.waitKey(0)
     
     return potentials
