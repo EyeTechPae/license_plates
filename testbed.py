@@ -8,7 +8,7 @@ try:
 except:
     path = 'test/car.png'
 
-cap = cv2.VideoCapture('entrada2.avi')
+cap = cv2.VideoCapture('entrada3.avi')
 mask = cv2.imread('mask.png')
 mask = np.double(cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)) / 255
 
@@ -34,7 +34,7 @@ while True:
         continue
     frame_count = 0
 
-    image = image[100:580, 300:940]
+    image = image[100:580, 300-200:940-200]
     raw = image.copy()
 
     # mask image
@@ -45,7 +45,7 @@ while True:
 
     # get a list of potential license plates
     segments = localize.get_plate_regions(gray)
-    localize.get_plate_regions(gray, debug=image)
+    localize.get_plate_regions(gray)
 
     if len(segments) == 1:
         times += 1
@@ -69,7 +69,7 @@ while True:
             #output = np.array((640, 480, 3), dtype="uint8")
             #cv2.perspectiveTransform(total_im, M, output)
 
-            #cv2.imwrite("plates/plate_pre{}.jpg".format(len(plates)), output)
+            cv2.imwrite("more_plates/plate{}.jpg".format(len(plates)), raw[y:y + h, x:x + w])
             width = max(width, w)
             height += h
 
