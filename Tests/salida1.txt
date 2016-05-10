@@ -1,0 +1,16 @@
+VIDEO salida1.mp4	https://mega.nz/#!qEhAiKDI!1Xe3BPrz-QM4PotsTn8nj2G3GXKGBVi4XKBJZSlAaqI
+10 coches	Precision 	Recall 
+Segmentación	%		%
+Reconocimiento	%		%
+
+Matricula
+5844FZF
+5329JBP
+7134BRC
+B2672UW
+3596GWN		IGUAL DETECTA UN TELEFONO QUE LLEVA EN EL LATERAL
+7903GJK
+4980BTJ
+B8540UJ
+5580GBT
+4511GSL

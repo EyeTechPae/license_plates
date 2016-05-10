@@ -1,0 +1,36 @@
+VIDEO entrada1.mp4	https://mega.nz/#!nERyzaDC!A0jdPhFVoU1NMJKYhJhwKcpJbosZY5dD86Z8Coqv9wA	
+30 coches	precision	recall
+Segmentación	100%		90%%
+Reconocimiento	%		%
+
+Matricula	
+8471BXP
+7625HKZ
+3188GBH
+2687DFB
+9789FLM
+8977DSG
+9713HYR
+2987FDD    	no detectado
+6027CSG
+7612DLP
+B0328WM
+2374CTS
+8653DPG
+M1447US		ESTE SE VA PATRAS detectado 2 veces
+3878FHT
+1360CDB
+1111GYB
+3190BBJ
+3809DSG    	no detectado
+0963GPD	   	detectado 2 veces
+0879GTH
+1149FLC
+1530CND
+0364GYZ
+0069GWS
+4650GBR
+6707JBG    	no detectado
+3684DRJ
+9742GCL
+1348HSL
